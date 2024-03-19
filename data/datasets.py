@@ -71,10 +71,21 @@ class RealFakeDataset(Dataset):
             temp = 'train/progan' if opt.data_label == 'train' else 'test/progan'
             real_list += get_list( os.path.join(opt.wang2020_data_path,temp), must_contain='0_real' )
             fake_list += get_list( os.path.join(opt.wang2020_data_path,temp), must_contain='1_fake' )
-        elif opt.data_mode == "dip"
-
-
-
+        elif opt.data_mode == "dip":
+            real_list, fake_list = [], []
+            real_subdirs = ["afhq-v2, cc3m, ffhq"]
+            fake_subdirs = ["IFv1-CC1M/IFv1-dpmsolver++-50-1M", 
+                            "SDv15R-CC1M/SDv15R-dpmsolver-25-1M", 
+                            "stylegan3-80K/stylegan3-t-ffhqu-1024x1024",
+                            "stylegan3-80K/stylegan3-t-metfaces-1024x1024"]
+            
+            for r_subdir in real_subdirs:
+                r_temp = f"ImageData/train/{r_subdir}"
+                real_list.extend(get_list(os.path.join(opt.wang2020_data_path, r_temp)))
+            for f_subdir in fake_subdirs:
+                f_temp = f"ImageData/train/{f_subdir}"
+                fake_list.extend(get_list(os.path.join(opt.wang2020_data_path, f_temp)))
+                        
         # setting the labels for the dataset
         self.labels_dict = {}
         for i in real_list:

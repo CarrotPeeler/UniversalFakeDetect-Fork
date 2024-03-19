@@ -24,7 +24,7 @@ class BaseOptions():
          
         parser.add_argument('--real_list_path', default=None, help='only used if data_mode==ours: path for the list of real images, which should contain train.pickle and val.pickle')
         parser.add_argument('--fake_list_path', default=None, help='only used if data_mode==ours: path for the list of fake images, which should contain train.pickle and val.pickle')
-        parser.add_argument('--wang2020_data_path', default=None, help='only used if data_mode==wang2020 it should contain train and test folders')
+        parser.add_argument('--wang2020_data_path', default=None, help='dir which contains train and test folders')
         parser.add_argument('--data_mode',  default='ours', help='wang2020 or ours')
         parser.add_argument('--data_label', default='train', help='label to decide whether train or validation dataset')
         parser.add_argument('--weight_decay', type=float, default=0.0, help='loss weight for l2 reg')
