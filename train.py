@@ -65,21 +65,21 @@ if __name__ == '__main__':
             model.save_networks( 'model_epoch_best.pth' )
             model.save_networks( 'model_epoch_%s.pth' % epoch )
 
-        # Validation
-        model.eval()
-        ap, r_acc, f_acc, acc = validate(model.model, val_loader)
-        val_writer.add_scalar('accuracy', acc, model.total_steps)
-        val_writer.add_scalar('ap', ap, model.total_steps)
-        print("(Val @ epoch {}) acc: {}; ap: {}".format(epoch, acc, ap))
+            # Validation
+            model.eval()
+            ap, r_acc, f_acc, acc = validate(model.model, val_loader)
+            val_writer.add_scalar('accuracy', acc, model.total_steps)
+            val_writer.add_scalar('ap', ap, model.total_steps)
+            print("(Val @ epoch {}) acc: {}; ap: {}".format(epoch, acc, ap))
 
-        early_stopping(acc, model)
-        if early_stopping.early_stop:
-            cont_train = model.adjust_learning_rate()
-            if cont_train:
-                print("Learning rate dropped by 10, continue training...")
-                early_stopping = EarlyStopping(patience=opt.earlystop_epoch, delta=-0.002, verbose=True)
-            else:
-                print("Early stopping.")
-                break
+            early_stopping(acc, model)
+            if early_stopping.early_stop:
+                cont_train = model.adjust_learning_rate()
+                if cont_train:
+                    print("Learning rate dropped by 10, continue training...")
+                    early_stopping = EarlyStopping(patience=opt.earlystop_epoch, delta=-0.002, verbose=True)
+                else:
+                    print("Early stopping.")
+                    break
         model.train()
 
