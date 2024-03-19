@@ -10,12 +10,14 @@
                  data_aug: False                         
                data_label: train                         
                 data_mode: dip                           	[default: ours]
+             dist_backend: nccl                          
           earlystop_epoch: 5                             
               epoch_count: 1                             
            fake_list_path: None                          
              fix_backbone: True                          	[default: False]
                   gpu_ids: 0,1                           	[default: 0]
                 init_gain: 0.02                          
+              init_method: tcp://localhost:9999          
                 init_type: normal                        
                   isTrain: True                          	[default: None]
                jpg_method: cv2,pil                       
@@ -25,11 +27,13 @@
                  loadSize: 256                           
                 loss_freq: 400                           
                        lr: 0.0001                        
+               max_sample: None                          
                      mode: binary                        
                      name: clip_vitl14                   	[default: experiment_name]
                 new_optim: False                         
                     niter: 100                           
                   no_flip: False                         
+               num_shards: 1                             
               num_threads: 8                             	[default: 4]
                     optim: adam                          
            real_list_path: None                          
@@ -37,6 +41,7 @@
                 rz_interp: bilinear                      
           save_epoch_freq: 5                             	[default: 1]
            serial_batches: False                         
+                 shard_id: 0                             
                    suffix:                               
               train_split: train                         
                 val_split: val                           

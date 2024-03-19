@@ -8,6 +8,8 @@ from earlystop import EarlyStopping
 from networks.trainer import Trainer
 from options.train_options import TrainOptions
 from tqdm.auto import tqdm
+import torch
+import distributed as du
 
 
 """Currently assumes jpg_prob, blur_prob 0 or 1"""
@@ -29,11 +31,7 @@ def get_val_opt():
     return val_opt
 
 
-
-if __name__ == '__main__':
-    opt = TrainOptions().parse()
-    val_opt = get_val_opt()
- 
+def train(opt, val_opt):
     model = Trainer(opt)
     
     data_loader = create_dataloader(opt)
@@ -61,6 +59,8 @@ if __name__ == '__main__':
 
             if model.total_steps in [10,30,50,100,1000,5000,10000] and False: # save models at these iters 
                 model.save_networks('model_iters_%s.pth' % model.total_steps)
+            # sync GPUs
+            torch.cuda.synchronize()
 
         if epoch % opt.save_epoch_freq == 0:
             print('saving the model at the end of epoch %d' % (epoch))
@@ -70,6 +70,8 @@ if __name__ == '__main__':
             # Validation
             model.eval()
             ap, r_acc, f_acc, acc = validate(model.model, val_loader)
+            if len(opt.gpu_ids) > 1:
+                ap, acc = du.all_reduce([ap, acc])
             val_writer.add_scalar('accuracy', acc, model.total_steps)
             val_writer.add_scalar('ap', ap, model.total_steps)
             print("(Val @ epoch {}) acc: {}; ap: {}".format(epoch, acc, ap))
@@ -84,4 +86,17 @@ if __name__ == '__main__':
                     print("Early stopping.")
                     break
         model.train()
+        # in case of fragmented memory
+        torch.cuda.empty_cache()
+
+
+if __name__ == '__main__':
+    opt = TrainOptions().parse()
+    val_opt = get_val_opt()
+
+    du.launch_job(opt=opt, val_opt=val_opt, init_method=opt.init_method, func=train)
+ 
+    
+        
+   
 

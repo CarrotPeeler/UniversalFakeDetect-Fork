@@ -34,6 +34,30 @@ class BaseOptions():
         parser.add_argument('--loadSize', type=int, default=256, help='scale images to this size')
         parser.add_argument('--cropSize', type=int, default=224, help='then crop to this size')
         parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
+        parser.add_argument(
+            "--shard_id",
+            help="The shard id of current node, Starts from 0 to num_shards - 1",
+            default=0,
+            type=int,
+        )
+        parser.add_argument(
+            "--num_shards",
+            help="Number of shards using by the job",
+            default=1,
+            type=int,
+        )
+        parser.add_argument(
+            "--init_method",
+            help="Initialization method, includes TCP or shared file-system",
+            default="tcp://localhost:9999",
+            type=str,
+        )
+        parser.add_argument(
+            "--dist_backend",
+            default="nccl",
+            type=str,
+            help="backend to use for distributed processing"
+        )
         parser.add_argument('--name', type=str, default='experiment_name', help='name of the experiment. It decides where to store samples and models')
         parser.add_argument('--num_threads', default=4, type=int, help='# threads for loading data')
         parser.add_argument('--checkpoints_dir', type=str, default='./checkpoints', help='models are saved here')
@@ -100,8 +124,8 @@ class BaseOptions():
             if id >= 0:
                 print(f"USING GPU {id}")
                 opt.gpu_ids.append(id)
-        if len(opt.gpu_ids) > 0:
-            torch.cuda.set_device(opt.gpu_ids[0])
+        # if len(opt.gpu_ids) > 0:
+        #     torch.cuda.set_device(opt.gpu_ids[0]) # handled later in distributed.py
 
         # additional
         #opt.classes = opt.classes.split(',')

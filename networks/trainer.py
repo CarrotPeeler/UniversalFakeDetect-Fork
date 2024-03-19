@@ -39,7 +39,16 @@ class Trainer(BaseModel):
 
         self.loss_fn = nn.BCEWithLogitsLoss()
 
-        self.model.to(opt.gpu_ids[0])
+        self.device = torch.cuda.current_device() if len(opt.gpu_ids) > 0 else "cpu"
+        if len(opt.gpu_ids) > 1:
+            # Make model replica operate on the current device
+            self.model = torch.nn.parallel.DistributedDataParallel(
+                module=self.model,
+                device_ids=[self.device],
+                output_device=self.device,
+                find_unused_parameters=False
+            )
+        self.model.to(self.device)
 
 
     def adjust_learning_rate(self, min_lr=1e-6):
