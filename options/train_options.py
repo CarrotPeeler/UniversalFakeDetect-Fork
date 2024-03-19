@@ -17,6 +17,8 @@ class TrainOptions(BaseOptions):
         parser.add_argument('--niter', type=int, default=100, help='total epoches')
         parser.add_argument('--beta1', type=float, default=0.9, help='momentum term of adam')
         parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate for adam')
+        parser.add_argument('--max_sample', type=int, default=None, help='only train this number of images for both fake/real')
+
 
         self.isTrain = True
         return parser

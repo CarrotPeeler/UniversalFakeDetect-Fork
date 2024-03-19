@@ -104,6 +104,15 @@ class RealFakeDataset(Dataset):
             for f_subdir in fake_subdirs:
                 f_temp = f"{path}/{f_subdir}"
                 fake_list.extend(get_list(os.path.join(opt.wang2020_data_path, f_temp)))
+
+        if max_sample is not None:
+            if (max_sample > len(real_list)) or (max_sample > len(fake_list)):
+                max_sample = 100
+                print("not enough images, max_sample falling to 100")
+            random.shuffle(real_list)
+            random.shuffle(fake_list)
+            real_list = real_list[0:max_sample]
+            fake_list = fake_list[0:max_sample]
                         
         # setting the labels for the dataset
         self.labels_dict = {}
