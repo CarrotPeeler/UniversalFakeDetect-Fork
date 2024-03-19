@@ -35,7 +35,7 @@
            real_list_path: None                          
            resize_or_crop: scale_and_crop                
                 rz_interp: bilinear                      
-          save_epoch_freq: 1                             
+          save_epoch_freq: 5                             	[default: 1]
            serial_batches: False                         
                    suffix:                               
               train_split: train                         

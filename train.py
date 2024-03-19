@@ -7,6 +7,7 @@ from data import create_dataloader
 from earlystop import EarlyStopping
 from networks.trainer import Trainer
 from options.train_options import TrainOptions
+from tqdm.auto import tqdm
 
 
 """Currently assumes jpg_prob, blur_prob 0 or 1"""
@@ -37,6 +38,7 @@ if __name__ == '__main__':
     
     data_loader = create_dataloader(opt)
     val_loader = create_dataloader(val_opt)
+    print(f"NUM TRAIN SAMPLES: {len(data_loader.dataset)}\nNUM VAL SAMPLES: {len(val_loader.dataset)}")
 
     train_writer = SummaryWriter(os.path.join(opt.checkpoints_dir, opt.name, "train"))
     val_writer = SummaryWriter(os.path.join(opt.checkpoints_dir, opt.name, "val"))
@@ -44,9 +46,9 @@ if __name__ == '__main__':
     early_stopping = EarlyStopping(patience=opt.earlystop_epoch, delta=-0.001, verbose=True)
     start_time = time.time()
     print ("Length of data loader: %d" %(len(data_loader)))
-    for epoch in range(opt.niter):
+    for epoch in tqdm(range(opt.niter)):
         
-        for i, data in enumerate(data_loader):
+        for i, data in enumerate(tqdm(data_loader)):
             model.total_steps += 1
 
             model.set_input(data)
