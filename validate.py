@@ -167,14 +167,19 @@ class RealFakeDataset(Dataset):
                         arch,
                         jpeg_quality=None,
                         gaussian_sigma=None):
-
+        assert real_path != '' or fake_path != ''
         assert data_mode in ["wang2020", "ours"]
         self.jpeg_quality = jpeg_quality
         self.gaussian_sigma = gaussian_sigma
         
         # = = = = = = data path = = = = = = = = = # 
-        if type(real_path) == str and type(fake_path) == str:
+        if data_mode == "dip":
+            path = real_path if real_path != '' else fake_path
+            image_list = self.read_path_single(path, data_mode, max_sample)
+            self.total_list = image_list
+        elif type(real_path) == str and type(fake_path) == str:
             real_list, fake_list = self.read_path(real_path, fake_path, data_mode, max_sample)
+            self.total_list = real_list + fake_list
         else:
             real_list = []
             fake_list = []
@@ -182,17 +187,21 @@ class RealFakeDataset(Dataset):
                 real_l, fake_l = self.read_path(real_p, fake_p, data_mode, max_sample)
                 real_list += real_l
                 fake_list += fake_l
-
-        self.total_list = real_list + fake_list
+            self.total_list = real_list + fake_list
 
 
         # = = = = = =  label = = = = = = = = = # 
-
         self.labels_dict = {}
-        for i in real_list:
-            self.labels_dict[i] = 0
-        for i in fake_list:
-            self.labels_dict[i] = 1
+
+        if data_mode == "dip":
+            targ = 0 if real_path != '' else 1
+            for i in image_list:
+                self.labels_dict[i] = targ
+        else:
+            for i in real_list:
+                self.labels_dict[i] = 0
+            for i in fake_list:
+                self.labels_dict[i] = 1
 
         stat_from = "imagenet" if arch.lower().startswith("imagenet") else "clip"
         self.transform = transforms.Compose([
@@ -224,7 +233,18 @@ class RealFakeDataset(Dataset):
         assert len(real_list) == len(fake_list)  
 
         return real_list, fake_list
+    
+    def read_path_single(self, path, data_mode, max_sample):
+        image_list = get_list(path)
 
+        if max_sample is not None:
+            if (max_sample > len(image_list)):
+                max_sample = 100
+                print("not enough images, max_sample falling to 100")
+            random.shuffle(image_list)
+            image_list = image_list[0:max_sample]
+
+        return image_list
 
 
     def __len__(self):

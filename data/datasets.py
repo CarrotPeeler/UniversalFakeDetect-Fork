@@ -72,18 +72,37 @@ class RealFakeDataset(Dataset):
             real_list += get_list( os.path.join(opt.wang2020_data_path,temp), must_contain='0_real' )
             fake_list += get_list( os.path.join(opt.wang2020_data_path,temp), must_contain='1_fake' )
         elif opt.data_mode == "dip":
+            if opt.data_label=="train":
+                path = "ImageData/train" 
+                real_subdirs = ["afhq-v2", "cc3m", "ffhq"]
+                fake_subdirs = ["IFv1-CC1M/IFv1-dpmsolver++-50-1M", 
+                                "SDv15R-CC1M/SDv15R-dpmsolver-25-1M", 
+                                "stylegan3-80K/stylegan3-t-ffhqu-1024x1024",
+                                "stylegan3-80K/stylegan3-t-metfaces-1024x1024"]
+
+            else: 
+                path = "ImageData/val"
+                real_subdirs = ["celeba-hq", "cc3m"]
+                fake_subdirs = ["cogview2-22K", 
+                                "IF-CC95K/IF-ddim-50-15K", 
+                                "IF-CC95K/IF-ddpm-50-15K",
+                                "IF-CC95K/IF-dpmsolver++-10-15K",
+                                "IF-CC95K/IF-dpmsolver++-25-15K",
+                                "Midjourneyv5-5K",
+                                "SDv15-CC30K/SDv15R-dpmsolver-25-15K",
+                                "SDv21-CC15K/SDv2-dpmsolver-25-10K",
+                                "stylegan3-60K/stylegan3-r-afhqv2-512x512",
+                                "stylegan3-60K/stylegan3-t-afhqv2-512x512",
+                                "stylegan3-60K/stylegan3-t-ffhqu-1024x1024",
+                                "stylegan3-60K/stylegan3-t-metfaces-1024x1024"]
+
             real_list, fake_list = [], []
-            real_subdirs = ["afhq-v2, cc3m, ffhq"]
-            fake_subdirs = ["IFv1-CC1M/IFv1-dpmsolver++-50-1M", 
-                            "SDv15R-CC1M/SDv15R-dpmsolver-25-1M", 
-                            "stylegan3-80K/stylegan3-t-ffhqu-1024x1024",
-                            "stylegan3-80K/stylegan3-t-metfaces-1024x1024"]
             
             for r_subdir in real_subdirs:
-                r_temp = f"ImageData/train/{r_subdir}"
+                r_temp = f"{path}/{r_subdir}"
                 real_list.extend(get_list(os.path.join(opt.wang2020_data_path, r_temp)))
             for f_subdir in fake_subdirs:
-                f_temp = f"ImageData/train/{f_subdir}"
+                f_temp = f"{path}/{f_subdir}"
                 fake_list.extend(get_list(os.path.join(opt.wang2020_data_path, f_temp)))
                         
         # setting the labels for the dataset
