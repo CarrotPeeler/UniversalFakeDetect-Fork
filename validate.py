@@ -168,7 +168,7 @@ class RealFakeDataset(Dataset):
                         jpeg_quality=None,
                         gaussian_sigma=None):
         assert real_path != '' or fake_path != ''
-        assert data_mode in ["wang2020", "ours"]
+        assert data_mode in ["wang2020", "ours", "dip"]
         self.jpeg_quality = jpeg_quality
         self.gaussian_sigma = gaussian_sigma
         
@@ -276,7 +276,7 @@ if __name__ == '__main__':
     parser.add_argument('--real_path', type=str, default=None, help='dir name or a pickle')
     parser.add_argument('--fake_path', type=str, default=None, help='dir name or a pickle')
     parser.add_argument('--data_mode', type=str, default=None, help='wang2020 or ours')
-    parser.add_argument('--max_sample', type=int, default=5000, help='only check this number of images for both fake/real')
+    parser.add_argument('--max_sample', type=int, default=None, help='only check this number of images for both fake/real')
 
     parser.add_argument('--arch', type=str, default='res50')
     parser.add_argument('--ckpt', type=str, default='./pretrained_weights/fc_weights.pth')
