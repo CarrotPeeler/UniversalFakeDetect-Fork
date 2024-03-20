@@ -1,7 +1,5 @@
 # Forked Version of UniversalFakeDetect
-Implemented for the [Sentry Dataset](https://github.com/Inf-imagine/Sentry?tab=readme-ov-file). 
-
-Adds distributed data parallel processsing implementation as well for multi-GPU training.
+Implemented for the [Sentry Dataset](https://github.com/Inf-imagine/Sentry?tab=readme-ov-file). This fork adds distributed data parallel processing implementation for multi-GPU training.
 
 **Towards Universal Fake Image Detectors that Generalize Across Generative Models** <br>
 [Utkarsh Ojha*](https://utkarshojha.github.io/), [Yuheng Li*](https://yuheng-li.github.io/), [Yong Jae Lee](https://pages.cs.wisc.edu/~yongjaelee/) <br>
