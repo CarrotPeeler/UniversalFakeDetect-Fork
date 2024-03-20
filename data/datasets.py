@@ -5,6 +5,7 @@ import torchvision.transforms as transforms
 import torchvision.transforms.functional as TF
 from torch.utils.data import Dataset
 from random import random, choice, shuffle
+import random as rand
 from io import BytesIO
 from PIL import Image
 from PIL import ImageFile
@@ -54,6 +55,7 @@ def get_list(path, must_contain=''):
 
 class RealFakeDataset(Dataset):
     def __init__(self, opt):
+        rand.seed(opt.seed)
         assert opt.data_label in ["train", "val"]
         #assert opt.data_mode in ["ours", "wang2020", "ours_wang2020"]
         self.data_label  = opt.data_label
