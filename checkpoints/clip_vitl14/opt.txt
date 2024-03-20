@@ -1,6 +1,6 @@
 ----------------- Options ---------------
                      arch: CLIP:ViT-L/14                 	[default: res50]
-               batch_size: 512                           	[default: 256]
+               batch_size: 64                            	[default: 256]
                     beta1: 0.9                           
                 blur_prob: 0.5                           
                  blur_sig: 0.0,3.0                       
@@ -34,7 +34,7 @@
                     niter: 100                           
                   no_flip: False                         
                num_shards: 1                             
-              num_threads: 2                             	[default: 4]
+              num_threads: 4                             
                     optim: adam                          
            real_list_path: None                          
            resize_or_crop: scale_and_crop                
