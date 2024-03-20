@@ -19,8 +19,8 @@ from pytorchvideo.layers.distributed import (  # noqa
 )
 
 
-def init_distributed_training(cfg):
-    return _init_distributed_training(cfg.NUM_GPUS, cfg.SHARD_ID)
+def init_distributed_training(num_gpus, shard_id):
+    return _init_distributed_training(num_gpus, shard_id)
 
 def all_gather(tensors):
     """

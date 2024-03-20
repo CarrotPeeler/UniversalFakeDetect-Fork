@@ -13,6 +13,7 @@ import pickle
 import os 
 from skimage.io import imread
 from copy import deepcopy
+import torch
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -105,14 +106,14 @@ class RealFakeDataset(Dataset):
                 f_temp = f"{path}/{f_subdir}"
                 fake_list.extend(get_list(os.path.join(opt.wang2020_data_path, f_temp)))
 
-        if max_sample is not None:
-            if (max_sample > len(real_list)) or (max_sample > len(fake_list)):
-                max_sample = 100
+        if opt.max_sample is not None:
+            if (opt.max_sample > len(real_list)) or (opt.max_sample > len(fake_list)):
+                opt.max_sample = 100
                 print("not enough images, max_sample falling to 100")
             random.shuffle(real_list)
             random.shuffle(fake_list)
-            real_list = real_list[0:max_sample]
-            fake_list = fake_list[0:max_sample]
+            real_list = real_list[0:opt.max_sample]
+            fake_list = fake_list[0:opt.max_sample]
                         
         # setting the labels for the dataset
         self.labels_dict = {}
@@ -126,18 +127,18 @@ class RealFakeDataset(Dataset):
         if opt.isTrain:
             crop_func = transforms.RandomCrop(opt.cropSize)
         elif opt.no_crop:
-            crop_func = transforms.Lambda(lambda img: img)
+            crop_func = DoNothing()
         else:
             crop_func = transforms.CenterCrop(opt.cropSize)
 
         if opt.isTrain and not opt.no_flip:
             flip_func = transforms.RandomHorizontalFlip()
         else:
-            flip_func = transforms.Lambda(lambda img: img)
+            flip_func = DoNothing()
         if not opt.isTrain and opt.no_resize:
-            rz_func = transforms.Lambda(lambda img: img)
+            rz_func = DoNothing()
         else:
-            rz_func = transforms.Lambda(lambda img: custom_resize(img, opt))
+            rz_func = CustomResize(opt)
         
 
         stat_from = "imagenet" if opt.arch.lower().startswith("imagenet") else "clip"
@@ -147,7 +148,7 @@ class RealFakeDataset(Dataset):
             print ("using Official CLIP's normalization")
             self.transform = transforms.Compose([
                 rz_func,
-                transforms.Lambda(lambda img: data_augment(img, opt)),
+                DataAugment(opt),
                 crop_func,
                 flip_func,
                 transforms.ToTensor(),
@@ -168,6 +169,29 @@ class RealFakeDataset(Dataset):
         img = Image.open(img_path).convert("RGB")
         img = self.transform(img)
         return img, label
+
+
+class DataAugment(torch.nn.Module):
+    def __init__(self, opt) -> None:
+        super().__init__()
+        self.opt = opt
+    def forward(self, img):  # we assume inputs are always structured like this
+        return data_augment(img, self.opt)
+    
+
+class CustomResize(torch.nn.Module):
+    def __init__(self, opt) -> None:
+        super().__init__()
+        self.opt = opt
+    def forward(self, img):  # we assume inputs are always structured like this
+        return custom_resize(img, self.opt)
+    
+
+class DoNothing(torch.nn.Module):
+    def __init__(self) -> None:
+        super().__init__()
+    def forward(self, img):  # we assume inputs are always structured like this
+        return img
 
 
 def data_augment(img, opt):
@@ -238,6 +262,7 @@ rz_dict = {'bilinear': Image.BILINEAR,
            'bicubic': Image.BICUBIC,
            'lanczos': Image.LANCZOS,
            'nearest': Image.NEAREST}
+
 def custom_resize(img, opt):
     interp = sample_discrete(opt.rz_interp)
     return TF.resize(img, opt.loadSize, interpolation=rz_dict[interp])

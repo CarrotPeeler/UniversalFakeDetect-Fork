@@ -3,13 +3,14 @@ import time
 from tensorboardX import SummaryWriter
 
 from validate import validate
-from data import create_dataloader
+from data import create_dataloader, shuffle_dataset
 from earlystop import EarlyStopping
 from networks.trainer import Trainer
 from options.train_options import TrainOptions
 from tqdm.auto import tqdm
 import torch
 import distributed as du
+import numpy as np
 
 
 """Currently assumes jpg_prob, blur_prob 0 or 1"""
@@ -32,6 +33,12 @@ def get_val_opt():
 
 
 def train(opt, val_opt):
+    du.init_distributed_training(len(opt.gpu_ids), opt.shard_id)
+    
+    # Set random seed from configs.
+    np.random.seed(opt.seed)
+    torch.manual_seed(opt.seed)
+
     model = Trainer(opt)
     
     data_loader = create_dataloader(opt)
@@ -44,8 +51,14 @@ def train(opt, val_opt):
     early_stopping = EarlyStopping(patience=opt.earlystop_epoch, delta=-0.001, verbose=True)
     start_time = time.time()
     print ("Length of data loader: %d" %(len(data_loader)))
+    # run training epochs
     for epoch in tqdm(range(opt.niter)):
-        
+        # set current epoch for the data loader
+        shuffle_dataset(data_loader, epoch)
+        if hasattr(data_loader.dataset, "_set_epoch_num"):
+            data_loader.dataset._set_epoch_num(epoch)
+
+        # perform mini-batch training
         for i, data in enumerate(tqdm(data_loader)):
             model.total_steps += 1
 
@@ -62,6 +75,7 @@ def train(opt, val_opt):
             # sync GPUs
             torch.cuda.synchronize()
 
+        # create model checkpoint
         if epoch % opt.save_epoch_freq == 0:
             print('saving the model at the end of epoch %d' % (epoch))
             model.save_networks( 'model_epoch_best.pth' )

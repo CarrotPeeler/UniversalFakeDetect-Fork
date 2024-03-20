@@ -34,12 +34,13 @@
                     niter: 100                           
                   no_flip: False                         
                num_shards: 1                             
-              num_threads: 8                             	[default: 4]
+              num_threads: 2                             	[default: 4]
                     optim: adam                          
            real_list_path: None                          
            resize_or_crop: scale_and_crop                
                 rz_interp: bilinear                      
           save_epoch_freq: 5                             	[default: 1]
+                     seed: 0                             
            serial_batches: False                         
                  shard_id: 0                             
                    suffix:                               
