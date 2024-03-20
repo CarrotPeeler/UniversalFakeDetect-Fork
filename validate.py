@@ -297,6 +297,10 @@ if __name__ == '__main__':
 
     model = get_model(opt.arch)
     state_dict = torch.load(opt.ckpt, map_location='cpu')
+    if "model" in list(state_dict.keys()):
+        state_dict = state_dict["model"]
+        state_dict = {"weight":state_dict["fc.weight"],
+                      "bias":state_dict["fc.bias"]}
     model.fc.load_state_dict(state_dict)
     print ("Model loaded..")
     model.eval()

@@ -1,6 +1,6 @@
 ----------------- Options ---------------
                      arch: CLIP:RN50                     	[default: res50]
-               batch_size: 256                           
+               batch_size: 512                           	[default: 256]
                     beta1: 0.9                           
                 blur_prob: 0.5                           
                  blur_sig: 0.0,3.0                       
