@@ -17,6 +17,7 @@ import numpy as np
 def get_val_opt():
     val_opt = TrainOptions().parse(print_options=False)
     val_opt.isTrain = False
+    val_opt.max_sample = 7000 # num samples to validate for real and fake val sets (14k total)
     val_opt.no_resize = False
     val_opt.no_crop = False
     val_opt.serial_batches = True
@@ -33,7 +34,8 @@ def get_val_opt():
 
 
 def train(opt, val_opt):
-    du.init_distributed_training(len(opt.gpu_ids), opt.shard_id)
+    if len(opt.gpu_ids) > 1:
+        du.init_distributed_training(len(opt.gpu_ids), opt.shard_id)
     
     # Set random seed from configs.
     np.random.seed(opt.seed)
@@ -54,9 +56,10 @@ def train(opt, val_opt):
     # run training epochs
     for epoch in tqdm(range(opt.niter)):
         # set current epoch for the data loader
-        shuffle_dataset(data_loader, epoch)
-        if hasattr(data_loader.dataset, "_set_epoch_num"):
-            data_loader.dataset._set_epoch_num(epoch)
+        if len(opt.gpu_ids) > 1:
+            shuffle_dataset(data_loader, epoch)
+            if hasattr(data_loader.dataset, "_set_epoch_num"):
+                data_loader.dataset._set_epoch_num(epoch)
 
         # perform mini-batch training
         for i, data in enumerate(tqdm(data_loader)):

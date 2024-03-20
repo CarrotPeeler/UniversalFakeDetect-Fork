@@ -110,8 +110,8 @@ class RealFakeDataset(Dataset):
             if (opt.max_sample > len(real_list)) or (opt.max_sample > len(fake_list)):
                 opt.max_sample = 100
                 print("not enough images, max_sample falling to 100")
-            random.shuffle(real_list)
-            random.shuffle(fake_list)
+            shuffle(real_list)
+            shuffle(fake_list)
             real_list = real_list[0:opt.max_sample]
             fake_list = fake_list[0:opt.max_sample]
                         
