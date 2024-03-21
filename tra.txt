@@ -1,0 +1,109 @@
+PLEASE DON'T KILL PROCESSES ON THE GPU
+WAIT YOU'RE TURN
+thanks :)
+----------------- Options ---------------
+                     arch: CLIP:ViT-L/14                 	[default: res50]
+               batch_size: 256                           
+                    beta1: 0.9                           
+                blur_prob: 0.5                           
+                 blur_sig: 0.0,3.0                       
+          checkpoints_dir: ./checkpoints                 
+                     ckpt: ./pretrained_weights/fc_weights.pth	[default: None]
+                class_bal: False                         
+                 cropSize: 224                           
+                 data_aug: False                         
+               data_label: train                         
+                data_mode: dip                           	[default: ours]
+             dist_backend: nccl                          
+          earlystop_epoch: 5                             
+              epoch_count: 1                             
+           fake_list_path: None                          
+             fix_backbone: True                          	[default: False]
+                  gpu_ids: 1                             	[default: 0]
+                init_gain: 0.02                          
+              init_method: tcp://localhost:9999          
+                init_type: normal                        
+                  isTrain: True                          	[default: None]
+               jpg_method: cv2,pil                       
+                 jpg_prob: 0.5                           
+                 jpg_qual: 30,100                        
+               last_epoch: -1                            
+                 loadSize: 256                           
+                loss_freq: 400                           
+                       lr: 0.0001                        
+               max_sample: None                          
+                     mode: binary                        
+                     name: clip_vitl14                   	[default: experiment_name]
+                new_optim: False                         
+                    niter: 100                           
+                  no_flip: False                         
+               num_shards: 1                             
+              num_threads: 2                             	[default: 4]
+                    optim: adam                          
+           real_list_path: None                          
+           resize_or_crop: scale_and_crop                
+                rz_interp: bilinear                      
+          save_epoch_freq: 5                             	[default: 1]
+                     seed: 0                             
+           serial_batches: False                         
+                 shard_id: 0                             
+                   suffix:                               
+              train_split: train                         
+                val_split: val                           
+       wang2020_data_path: /home/vislab-001/Jared/dip/CS545-Real-Fake-Image-Detection/sentry-dataset/	[default: None]
+             weight_decay: 0.0                           
+----------------- End -------------------
+USING GPU 1
+USING GPU 1
+mean and std stats are from:  clip
+using Official CLIP's normalization
+mean and std stats are from:  clip
+using Official CLIP's normalization
+NUM TRAIN SAMPLES: 481222
+NUM VAL SAMPLES: 14000
+Length of data loader: 1880
+  0%|          | 0/100 [00:00<?, ?it/s]
+  0%|          | 0/1880 [00:00<?, ?it/s][A
+  0%|          | 1/1880 [00:03<1:47:06,  3.42s/it][A
+  0%|          | 2/1880 [00:07<1:53:27,  3.62s/it][A
+  0%|          | 3/1880 [00:11<1:56:36,  3.73s/it][A
+  0%|          | 4/1880 [00:14<1:58:13,  3.78s/it][A
+  0%|          | 5/1880 [00:18<1:59:18,  3.82s/it][A
+  0%|          | 6/1880 [00:22<1:59:54,  3.84s/it][A
+  0%|          | 7/1880 [00:26<2:00:39,  3.87s/it][A
+  0%|          | 8/1880 [00:30<2:01:05,  3.88s/it][A
+  0%|          | 9/1880 [00:34<2:01:41,  3.90s/it][A
+  1%|          | 10/1880 [00:38<2:02:24,  3.93s/it][A
+  1%|          | 11/1880 [00:42<2:02:33,  3.93s/it][A
+  1%|          | 12/1880 [00:46<2:03:00,  3.95s/it][A
+  1%|          | 13/1880 [00:50<2:03:17,  3.96s/it][A
+  1%|          | 14/1880 [00:54<2:03:52,  3.98s/it][A
+  1%|          | 15/1880 [00:58<2:04:13,  4.00s/it][A
+  1%|          | 16/1880 [01:02<2:04:29,  4.01s/it][A
+  1%|          | 17/1880 [01:06<2:04:57,  4.02s/it][A
+  1%|          | 18/1880 [01:10<2:05:02,  4.03s/it][A
+  1%|          | 19/1880 [01:14<2:05:22,  4.04s/it][A
+  1%|          | 20/1880 [01:18<2:05:40,  4.05s/it][A
+  1%|          | 21/1880 [01:22<2:05:46,  4.06s/it][A
+  1%|          | 22/1880 [01:26<2:05:56,  4.07s/it][A
+  1%|          | 23/1880 [01:30<2:06:06,  4.07s/it][A
+  1%|▏         | 24/1880 [01:35<2:06:20,  4.08s/it][A
+  1%|▏         | 25/1880 [01:39<2:06:29,  4.09s/it][A
+  1%|▏         | 26/1880 [01:43<2:06:31,  4.09s/it][A
+  1%|▏         | 27/1880 [01:47<2:06:37,  4.10s/it][A
+  1%|▏         | 28/1880 [01:51<2:06:40,  4.10s/it][A
+  2%|▏         | 29/1880 [01:55<2:06:45,  4.11s/it][A
+  2%|▏         | 30/1880 [01:59<2:06:32,  4.10s/it][A
+  2%|▏         | 31/1880 [02:03<2:06:35,  4.11s/it][A
+  2%|▏         | 32/1880 [02:07<2:06:36,  4.11s/it][A
+  2%|▏         | 33/1880 [02:12<2:06:29,  4.11s/it][A
+  2%|▏         | 34/1880 [02:16<2:06:31,  4.11s/it][A
+  2%|▏         | 35/1880 [02:20<2:06:28,  4.11s/it][A
+  2%|▏         | 36/1880 [02:24<2:06:37,  4.12s/it][A
+  2%|▏         | 37/1880 [02:28<2:06:41,  4.12s/it][A
+  2%|▏         | 38/1880 [02:32<2:06:42,  4.13s/it][A
+  2%|▏         | 39/1880 [02:36<2:06:40,  4.13s/it][A
+  2%|▏         | 40/1880 [02:40<2:06:32,  4.13s/it][A
+  2%|▏         | 41/1880 [02:45<2:06:29,  4.13s/it][A
+  2%|▏         | 42/1880 [02:49<2:06:35,  4.13s/it][A
+  2%|▏         | 43/1880 [02:53<2:06:31,  4.13s/it][A

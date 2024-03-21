@@ -45,7 +45,12 @@ class Trainer(BaseModel):
         self.loss_fn = nn.BCEWithLogitsLoss()
 
         # set current device and transfer model to it
-        self.device = torch.cuda.current_device() if len(opt.gpu_ids) > 0 else "cpu"
+        if len(opt.gpu_ids) > 1:
+            self.device = torch.cuda.current_device() 
+        elif len(opt.gpu_ids) == 1:
+            self.device = opt.gpu_ids[0] 
+        else: 
+            self.device = "cpu"
         self.model.to(self.device)
 
         # enable distributed parallel processing if num gpus > 1
