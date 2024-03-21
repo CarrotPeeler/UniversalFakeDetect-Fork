@@ -86,7 +86,7 @@ def train(opt, val_opt):
 
             # Validation
             model.eval()
-            ap, r_acc, f_acc, acc = validate(model.model, val_loader)
+            ap, r_acc, f_acc, acc = validate(model.model, val_loader, gpu_id=model.device)
             if len(opt.gpu_ids) > 1:
                 ap, acc = du.all_reduce([ap, acc])
             val_writer.add_scalar('accuracy', acc, model.total_steps)

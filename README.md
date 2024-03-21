@@ -60,7 +60,7 @@ datasets
  
 - You can evaluate the model on all the dataset at once by running:
 ```bash
-python3 validate.py --arch=CLIP:ViT-L/14 --ckpt=pretrained_weights/fc_weights.pth --result_folder=results/clip_vitl14 
+python3 validate.py --arch=CLIP:ViT-L/14 --ckpt=pretrained_weights/fc_weights.pth --result_folder=results/clip_vitl14 --gpu_id=0
 ```
 
 - You can also evaluate the model on one generative model by specifying the paths of real and fake datasets

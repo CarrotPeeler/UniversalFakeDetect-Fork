@@ -94,13 +94,13 @@ def calculate_acc(y_true, y_pred, thres):
     return r_acc, f_acc, acc    
 
 
-def validate(model, loader, find_thres=False):
+def validate(model, loader, find_thres=False, gpu_id=0):
 
     with torch.no_grad():
         y_true, y_pred = [], []
         print ("Length of dataset: %d" %(len(loader)))
         for img, label in loader:
-            in_tens = img.cuda()
+            in_tens = img.to(gpu_id)
 
             y_pred.extend(model(in_tens).sigmoid().flatten().tolist())
             y_true.extend(label.flatten().tolist())
@@ -277,6 +277,7 @@ if __name__ == '__main__':
     parser.add_argument('--fake_path', type=str, default=None, help='dir name or a pickle')
     parser.add_argument('--data_mode', type=str, default=None, help='wang2020 or ours')
     parser.add_argument('--max_sample', type=int, default=None, help='only check this number of images for both fake/real')
+    parser.add_argument('--gpu_id', type=int, default=0, help="ID value (i.e., 0 or 1) of GPU to be used")
 
     parser.add_argument('--arch', type=str, default='res50')
     parser.add_argument('--ckpt', type=str, default='./pretrained_weights/fc_weights.pth')
@@ -304,7 +305,7 @@ if __name__ == '__main__':
     model.fc.load_state_dict(state_dict)
     print ("Model loaded..")
     model.eval()
-    model.cuda()
+    model.to(opt.gpu_id)
 
     if (opt.real_path == None) or (opt.fake_path == None) or (opt.data_mode == None):
         dataset_paths = DATASET_PATHS
@@ -326,7 +327,7 @@ if __name__ == '__main__':
                                     )
 
         loader = torch.utils.data.DataLoader(dataset, batch_size=opt.batch_size, shuffle=False, num_workers=4)
-        ap, r_acc0, f_acc0, acc0, r_acc1, f_acc1, acc1, best_thres = validate(model, loader, find_thres=True)
+        ap, r_acc0, f_acc0, acc0, r_acc1, f_acc1, acc1, best_thres = validate(model, loader, find_thres=True, gpu_id=opt.gpu_id)
 
         with open( os.path.join(opt.result_folder,'ap.txt'), 'a') as f:
             f.write(dataset_path['key']+': ' + str(round(ap*100, 2))+'\n' )
