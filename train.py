@@ -17,7 +17,7 @@ import numpy as np
 def get_val_opt():
     val_opt = TrainOptions().parse(print_options=False)
     val_opt.isTrain = False
-    val_opt.max_sample = 7000 # num samples to validate for real and fake val sets (14k total)
+    val_opt.max_sample = 1000 # num samples to validate for each real and fake val set (14k total)
     val_opt.no_resize = False
     val_opt.no_crop = False
     val_opt.serial_batches = True

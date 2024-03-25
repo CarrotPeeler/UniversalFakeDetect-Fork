@@ -103,20 +103,20 @@ class RealFakeDataset(Dataset):
             
             for r_subdir in real_subdirs:
                 r_temp = f"{path}/{r_subdir}"
-                real_list.extend(get_list(os.path.join(opt.wang2020_data_path, r_temp)))
+                r_list = get_list(os.path.join(opt.wang2020_data_path, r_temp))
+                if opt.max_sample is not None:
+                    shuffle(r_list)
+                    r_list = r_list[0:opt.max_sample]
+                real_list.extend(r_list)
+                
             for f_subdir in fake_subdirs:
                 f_temp = f"{path}/{f_subdir}"
-                fake_list.extend(get_list(os.path.join(opt.wang2020_data_path, f_temp)))
+                f_list = get_list(os.path.join(opt.wang2020_data_path, f_temp))
+                if opt.max_sample is not None:
+                    shuffle(f_list)
+                    f_list = f_list[0:opt.max_sample]
+                fake_list.extend(f_list)
 
-        if opt.max_sample is not None:
-            if (opt.max_sample > len(real_list)) or (opt.max_sample > len(fake_list)):
-                opt.max_sample = 100
-                print("not enough images, max_sample falling to 100")
-            shuffle(real_list)
-            shuffle(fake_list)
-            real_list = real_list[0:opt.max_sample]
-            fake_list = fake_list[0:opt.max_sample]
-                        
         # setting the labels for the dataset
         self.labels_dict = {}
         for i in real_list:
