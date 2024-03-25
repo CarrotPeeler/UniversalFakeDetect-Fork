@@ -1,0 +1,4 @@
+Model loaded..
+Length of dataset: 89
+validate.py:21: DeprecationWarning: Please use `gaussian_filter` from the `scipy.ndimage` namespace, the `scipy.ndimage.filters` namespace is deprecated.
+  from scipy.ndimage.filters import gaussian_filter

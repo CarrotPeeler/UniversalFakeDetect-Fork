@@ -108,9 +108,6 @@ def train(opt, val_opt):
 
 
 if __name__ == '__main__':
-    print("PLEASE DON'T KILL PROCESSES ON THE GPU")
-    print("WAIT YOU'RE TURN")
-    print("thanks :)")
     opt = TrainOptions().parse()
     val_opt = get_val_opt()
 
