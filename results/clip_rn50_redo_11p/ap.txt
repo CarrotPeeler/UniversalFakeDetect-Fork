@@ -1,0 +1,14 @@
+cc3m: -0.0
+celeba-hq: -0.0
+cogview2-22k: 100.0
+if-ddim-50-15k: 100.0
+if-ddpm-50-15k: 100.0
+if-dpmsolver++-10-15K: 100.0
+if-dpmsolver++-25-15K: 100.0
+midjourneyv5-5k: 100.0
+sdv15r-dpmsolver-25-15k: 100.0
+sdv2-dpmsolver-25-10K: 100.0
+stylegan3-r-afhqv2-512x512: 100.0
+stylegan3-t-afhqv2-512x512: 100.0
+stylegan3-t-ffhqu-1024x1024: 100.0
+stylegan3-t-metfaces-1024x1024: 100.0
